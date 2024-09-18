@@ -4,7 +4,7 @@
 const char* ssid = "REPLACE_WITH_YOUR_SSID";
 const char* password = "REPLACE_WITH_YOUR_PASSWORD";
 
-const char* serverName = "https://karking-api.zaqbit.com/cars";
+const char* serverName = "https://karking-api.zaqbit.com";
 
 unsigned long lastTime = 0;
 
