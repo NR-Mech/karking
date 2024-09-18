@@ -6,25 +6,24 @@
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 MFRC522::MIFARE_Key key;          
+MFRC522::StatusCode status;
 
 // Set the block to which we want to write data
 int blockNum = 2;
 // Create an array of 16 Bytes and fill it with data
-byte blockData [16] = { "PGV-0746" };
+byte blockData [16] = { "DFT-5414" };
 
 // Create another array to read data from Block
-// Legthn of buffer should be 2 Bytes more than the size of Block (16 Bytes)
+// Length of buffer should be 2 Bytes more than the size of Block (16 Bytes)
 byte bufferLen = 18;
 byte readBlockData[18];
-
-MFRC522::StatusCode status;
 
 void setup() 
 {
   Serial.begin(9600);
   SPI.begin();
   mfrc522.PCD_Init();
-  Serial.println("Scan a MIFARE 1K Tag to write data...");
+  Serial.println("Scan Tag to write data...");
 }
 
 void loop()
@@ -42,7 +41,7 @@ void loop()
   {
     return;
   }
-  
+
   // Select one of the cards
   if (!mfrc522.PICC_ReadCardSerial()) 
   {
@@ -66,14 +65,14 @@ void loop()
   Serial.print("\n");
   Serial.println("Writing to Data Block...");
   WriteDataToBlock(blockNum, blockData);
-  
+
   Serial.print("\n");
   Serial.println("Reading from Data Block...");
   ReadDataFromBlock(blockNum, readBlockData);
   
-  /* Print the data read from block */
+  // Print the data read from block
   Serial.print("\n");
-  Serial.print("Data in Block:");
+  Serial.print("Data in Block: ");
   Serial.print(blockNum);
   Serial.print(" --> ");
   for (int j=0 ; j<16 ; j++)
@@ -82,6 +81,12 @@ void loop()
   }
   Serial.print("\n");
 }
+
+
+
+
+
+
 
 void WriteDataToBlock(int blockNum, byte blockData[]) 
 {
