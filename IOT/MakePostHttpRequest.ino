@@ -1,8 +1,8 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-const char* ssid = "REPLACE_WITH_YOUR_SSID";
-const char* password = "REPLACE_WITH_YOUR_PASSWORD";
+const char* ssid = "NOVA ROMA - ALUNOS";
+const char* password = "Alunos@NR!2022!";
 
 const char* serverName = "https://karking-api.zaqbit.com";
 
@@ -38,11 +38,8 @@ void loop() {
 
       http.addHeader("Content-Type", "application/json");
       http.addHeader("X-API-Key", "e46b113c7c914c9b8d3da8d91ac8e6f2");
-      String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&value1=24.25&value2=49.54&value3=1005.14";           
-      int httpResponseCode = http.POST(httpRequestData);
       
-      http.addHeader("Content-Type", "application/json");
-      int httpResponseCode = http.POST("{\"placa\":\"PGV-0746\"}");
+      int httpResponseCode = http.POST("{\"plate\":\"PGV-0746\"}");
      
       Serial.print("HTTP Response code: ");
       Serial.println(httpResponseCode);

@@ -8,7 +8,7 @@ public class GetVehiclesController(KarkingDbContext ctx) : ControllerBase
     [ProducesResponseType(200)]
     public async Task<IActionResult> Get()
     {
-        var vehicles = await ctx.Vehicles.ToListAsync();
+        var vehicles = await ctx.Vehicles.OrderByDescending(x => x.CreatedAt).ToListAsync();
 
         return Ok(vehicles);
     }
