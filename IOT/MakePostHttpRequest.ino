@@ -1,9 +1,10 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <WiFiClientSecure.h>
 
 const char* ssid = "NOVA ROMA - ALUNOS";
 const char* password = "Alunos@NR!2022!";
-const char* serverName = "https://karking-api.zaqbit.com";
+const char* serverName = "https://karking-api.zaqbit.com/vehicles";
 
 unsigned long lastTime = 0;
 
@@ -30,20 +31,23 @@ void loop() {
   // Send an HTTP POST request every 5 seconds
   if ((millis() - lastTime) > timerDelay) {
     if (WiFi.status() == WL_CONNECTED) {
-      WiFiClient client;
-      HTTPClient http;
-    
-      http.begin(client, serverName);
+      WiFiClientSecure *client = new WiFiClientSecure;
+      HTTPClient https;
 
-      http.addHeader("Content-Type", "application/json");
-      http.addHeader("X-API-Key", "e46b113c7c914c9b8d3da8d91ac8e6f2");
+      client->setInsecure();
+
+      https.begin(*client, serverName);
+
+      https.addHeader("Content-Type", "application/json");
+      https.addHeader("X-API-Key", "e46b113c7c914c9b8d3da8d91ac8e6f2");
       
-      int httpResponseCode = http.POST("{\"plate\":\"PGV-0746\"}");
+      int httpResponseCode = https.POST("{\"plate\":\"PGV-0746\"}");
      
       Serial.print("HTTP Response code: ");
       Serial.println(httpResponseCode);
+      Serial.println(https.getString());
 
-      http.end();
+      https.end();
     }
     else {
       Serial.println("WiFi disconnected...");

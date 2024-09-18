@@ -22,6 +22,6 @@ public class RegisterVehicleEntryController(KarkingDbContext ctx) : ControllerBa
 
         await ctx.SaveChangesAsync();
 
-        return Ok(vehicle);
+        return Ok();
     }
 }
