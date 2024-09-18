@@ -4,7 +4,7 @@ namespace Karking.Back.Features.RegisterVehicleEntry;
 [Consumes("application/json"), Produces("application/json")]
 public class RegisterVehicleEntryController(KarkingDbContext ctx) : ControllerBase
 {
-    [HttpPost("vehicles")]
+    [HttpPost("vehicles"), ApiKey]
     [ProducesResponseType(200)]
     public async Task<IActionResult> Register([FromBody] RegisterVehicleEntryIn data)
     {

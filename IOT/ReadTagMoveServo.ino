@@ -11,7 +11,7 @@
 #define GREEN_PIN 12
 #define RED_PIN 32
 #define BUZZER_PIN 13
- 
+
 Servo servo;
 int angle = 0;
 

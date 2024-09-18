@@ -6,6 +6,8 @@ public static class HttpConfigs
     {
         services.AddControllers();
         services.AddRouting(options => options.LowercaseUrls = true);
+
+        services.AddSingleton<ApiKeyAuthorizationFilter>();
     }
 
     public static void UseControllers(this IApplicationBuilder app)

@@ -1,6 +1,6 @@
 using Karking.Back.Features.RegisterVehicleEntry;
 
-namespace Syki.Back.Database;
+namespace Karking.Back.Database;
 
 public class KarkingDbContext(IConfiguration configuration) : DbContext
 {

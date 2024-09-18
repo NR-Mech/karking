@@ -35,8 +35,9 @@ void loop() {
       HTTPClient http;
     
       http.begin(client, serverName);
-      
+
       http.addHeader("Content-Type", "application/json");
+      http.addHeader("X-API-Key", "e46b113c7c914c9b8d3da8d91ac8e6f2");
       String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&value1=24.25&value2=49.54&value3=1005.14";           
       int httpResponseCode = http.POST(httpRequestData);
       
