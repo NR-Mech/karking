@@ -3,7 +3,6 @@
 
 const char* ssid = "NOVA ROMA - ALUNOS";
 const char* password = "Alunos@NR!2022!";
-
 const char* serverName = "https://karking-api.zaqbit.com";
 
 unsigned long lastTime = 0;
