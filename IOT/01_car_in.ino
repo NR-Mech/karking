@@ -21,7 +21,7 @@ int minAngle = 0;
 int maxAngle = 100;
 
 MFRC522 _mfrc522(5, 2);
-MFRC522::MIFARE_Key _key;          
+MFRC522::MIFARE_Key _key;
 
 int _blockIndex = 2;
 byte _bufferSize = 18;
@@ -33,20 +33,16 @@ const char* ssid = "Zaqueu";
 const char* password = "Zaqueu2023";
 const char* serverName = "https://karking-api.zaqbit.com/vehicles";
 
+WiFiClientSecure *client = new WiFiClientSecure;
+HTTPClient https;
+
 void setup() 
 {
   Serial.begin(9600);
   SPI.begin();
   _mfrc522.PCD_Init();
-
-  WiFi.begin(ssid, password);
-  Serial.println("Conectando...");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.print("Online!");
+// conecta uma vez no setup
+connectToWifi();
 
 	ESP32PWM::allocateTimer(0);
 	ESP32PWM::allocateTimer(1);
@@ -76,54 +72,74 @@ void loop()
   _mfrc522.MIFARE_Read(_blockIndex, _readBlockData, &_bufferSize);
 
   String plate = String((char*)_readBlockData);
-  Serial.print("Placa = ");
-  Serial.print(plate);
-  Serial.print("\n");
+  Serial.print("Placa = " + plate + "\n");
+  operateServo();
+  sendHTTPRequest(plate);
 
+  _mfrc522.PICC_HaltA();
+  _mfrc522.PCD_StopCrypto1();
+}
+
+void connectToWifi() {
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting to WiFi");
+  
+  int attempts = 0;
+  while (WiFi.status() != WL_CONNECTED && attempts < 20) {
+    delay(1000);
+    Serial.println(".");
+    attempts++;
+  }
+  
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("Connected to WiFi");
+    client->setInsecure();
+  } else {
+    Serial.println("Failed to connect to WiFi.");
+  }
+}
+
+void sendHTTPRequest(String plate) {
+  // Checa se o WiFi está conectado antes de enviar a requisição
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi offline, trying to reconnect...");
+    connectToWifi();
+    if (WiFi.status() != WL_CONNECTED) {
+      Serial.println("Unable to send data, WiFi offline.");
+      return;
+    }
+  }
+
+  https.begin(*client, serverName);
+  https.addHeader("Content-Type", "application/json");
+  https.addHeader("X-API-Key", "e46b113c7c914c9b8d3da8d91ac8e6f2");
+  int httpResponseCode = https.POST("{\"plate\":\"" + plate + "\"}");
+  Serial.print("HTTP Response code: ");
+  Serial.println(httpResponseCode);
+  https.end();
+}
+
+// Função para operar o servo
+void operateServo() {
   digitalWrite(RED_PIN, LOW);
   digitalWrite(GREEN_PIN, HIGH);
   digitalWrite(BUZZER_PIN, HIGH);
   delay(500);
   digitalWrite(BUZZER_PIN, LOW);
 
-  for (angle = minAngle; angle <= maxAngle; angle += 2) {
-    servo.write(angle);
-    delay(15);
-  }
-
+  moveServo(minAngle, maxAngle, 15);
   delay(3000);
-
   digitalWrite(GREEN_PIN, LOW);
   digitalWrite(RED_PIN, HIGH);
-  for (angle = maxAngle; angle >= minAngle; angle -= 2) {
+  moveServo(maxAngle, minAngle, 15);
+}
+
+// Tudo de movimentação do servo
+void moveServo(int startAngle, int endAngle, int delayTime) {
+  for (angle = startAngle; angle <= endAngle; angle += 2) {
     servo.write(angle);
-    delay(15);
+    delay(delayTime);
   }
-
-  if (WiFi.status() == WL_CONNECTED) {
-    WiFiClientSecure *client = new WiFiClientSecure;
-    HTTPClient https;
-
-    client->setInsecure();
-    https.begin(*client, serverName);
-
-    https.addHeader("Content-Type", "application/json");
-    https.addHeader("X-API-Key", "e46b113c7c914c9b8d3da8d91ac8e6f2");
-    
-    int httpResponseCode = https.POST("{\"plate\":\"" + plate + "\"}");
-    
-    Serial.print("HTTP Response code: ");
-    Serial.print(httpResponseCode);
-    Serial.println(https.getString());
-
-    https.end();
-  }
-  else {
-    Serial.println("Off-line...");
-  }
-
-  _mfrc522.PICC_HaltA();
-  _mfrc522.PCD_StopCrypto1();
 }
 
 void Authenticate()
