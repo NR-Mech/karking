@@ -11,7 +11,7 @@ public class VehicleConfig : IEntityTypeConfiguration<Vehicle>
 
         vehicle.Property(c => c.Plate);
 
-        vehicle.HasMany(x => x.Entries)
+        vehicle.HasMany(x => x.Sessions)
             .WithOne()
             .HasForeignKey(x => x.VehicleId);
     }

@@ -11,8 +11,11 @@ public class Startup
         services.AddCorsConfigs();
     }
 
-    public static void Configure(IApplicationBuilder app)
+    public static void Configure(IApplicationBuilder app, KarkingDbContext ctx)
     {
+        ctx.Database.EnsureDeleted();
+        ctx.Database.EnsureCreated();
+
         app.UseCors();
 
         app.UseRouting();

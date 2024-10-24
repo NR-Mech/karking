@@ -9,12 +9,12 @@ public class GetVehiclesController(KarkingDbContext ctx) : ControllerBase
     public async Task<IActionResult> Get()
     {
         var vehicles = await ctx.Vehicles
-            .Include(x => x.Entries)
+            .Include(x => x.Sessions)
             .OrderByDescending(x => x.CreatedAt).ToListAsync();
 
         foreach (var vehicle in vehicles)
         {
-            vehicle.Entries = vehicle.Entries.OrderByDescending(x => x.CreatedAt).ToList();
+            vehicle.Sessions = vehicle.Sessions.OrderByDescending(x => x.EntryAt).ToList();
         }
 
         return Ok(vehicles);
