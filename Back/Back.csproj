@@ -7,10 +7,12 @@
     <NoWarn>CS1591;CS8618;CS8602;CS8604;</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <InvariantGlobalization>true</InvariantGlobalization>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     <PackageReference Include="EFCore.NamingConventions" Version="8.0.0-rc.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />

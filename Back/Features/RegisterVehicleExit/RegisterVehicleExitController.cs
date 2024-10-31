@@ -26,6 +26,9 @@ public class RegisterVehicleExitController(KarkingDbContext ctx) : ControllerBas
 
         if (session.ExitLimit < DateTime.Now)
         {
+            ctx.Add(session.GetNewAfterExpiration());
+            await ctx.SaveChangesAsync();
+
             var result = new
             {
                 Status = "Período de carência finalizado",

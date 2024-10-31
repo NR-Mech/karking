@@ -9,6 +9,8 @@ public class Startup
         services.AddEfCoreConfigs();
 
         services.AddCorsConfigs();
+
+        services.AddDocsConfigs();
     }
 
     public static void Configure(IApplicationBuilder app, KarkingDbContext ctx)
@@ -17,6 +19,8 @@ public class Startup
         ctx.Database.EnsureCreated();
 
         app.UseCors();
+
+        app.UseDocs();
 
         app.UseRouting();
 

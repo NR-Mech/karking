@@ -24,4 +24,17 @@ public class VehicleSession
         EntryAt = DateTime.Now;
         PayToken = KarkingExtensions.GetPayToken();
     }
+
+    public VehicleSession GetNewAfterExpiration()
+    {
+        var session = new VehicleSession()
+        {
+            Id = Guid.NewGuid(),
+            Plate = Plate,
+            EntryAt = ExitLimit!.Value,
+            PayToken = PayToken,
+        };
+
+        return session;
+    }
 }
