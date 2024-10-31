@@ -4,7 +4,7 @@ namespace Karking.Back.Database;
 
 public class KarkingDbContext(IConfiguration configuration) : DbContext
 {
-    public DbSet<Vehicle> Vehicles { get; set; }
+    public DbSet<VehicleSession> Sessions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

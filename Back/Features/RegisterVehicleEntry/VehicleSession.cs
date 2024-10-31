@@ -5,7 +5,7 @@ namespace Karking.Back.Features.RegisterVehicleEntry;
 public class VehicleSession
 {
     public Guid Id { get; set; }
-    public Guid VehicleId { get; set; }
+    public string Plate { get; set; }
     public DateTime EntryAt { get; set; }
 
     public string PayToken { get; set; }
@@ -17,10 +17,10 @@ public class VehicleSession
 
     private VehicleSession() {}
 
-    public VehicleSession(Guid vehicleId)
+    public VehicleSession(string plate)
     {
         Id = Guid.NewGuid();
-        VehicleId = vehicleId;
+        Plate = plate;
         EntryAt = DateTime.Now;
         PayToken = KarkingExtensions.GetPayToken();
     }

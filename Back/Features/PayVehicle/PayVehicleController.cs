@@ -9,20 +9,18 @@ public class PayVehicleController(KarkingDbContext ctx) : ControllerBase
     public async Task<IActionResult> Get([FromRoute] string plate, [FromBody] PayVehicleIn data)
     {
         plate = plate.ToUpper();
-        var vehicle = await ctx.Vehicles
-            .Include(x => x.Sessions)
-            .FirstOrDefaultAsync(x => x.Plate == plate);
+        var sessions = await ctx.Sessions.Where(x => x.Plate == plate).ToListAsync();
 
-        if (vehicle == null) return BadRequest("Veículo não encontrado");
+        if (sessions.Count == 0) return BadRequest("Veículo não encontrado");
 
-        var session = vehicle.Sessions.OrderByDescending(x => x.EntryAt).First();
+        var session = sessions.OrderByDescending(x => x.EntryAt).First();
 
         if (session.PayToken != data.Token.ToString()) return BadRequest("Token inválido");
 
         if (session.PaidAt == null)
         {
             session.PaidAt = DateTime.Now;
-            session.PaidAmount = Convert.ToInt32(Math.Round((DateTime.Now - session.EntryAt).TotalMinutes)) + 1;
+            session.PaidAmount = Convert.ToInt32(Math.Ceiling((DateTime.Now - session.EntryAt).TotalSeconds/60.0));
             session.ExitLimit = DateTime.Now.AddMinutes(1);
             await ctx.SaveChangesAsync();
 

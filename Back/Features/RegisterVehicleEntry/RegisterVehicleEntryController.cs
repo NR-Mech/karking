@@ -9,24 +9,22 @@ public class RegisterVehicleEntryController(KarkingDbContext ctx) : ControllerBa
     public async Task<IActionResult> Register([FromBody] RegisterVehicleEntryIn data)
     {
         var plate = data.Plate.ToUpper();
-        var vehicle = await ctx.Vehicles.Include(x => x.Sessions).FirstOrDefaultAsync(x => x.Plate == plate);
+        var sessions = await ctx.Sessions.Where(x => x.Plate == plate).ToListAsync();
 
-        if (vehicle == null)
+        if (sessions.Count == 0)
         {
-            vehicle = new Vehicle(plate);
-            ctx.Add(vehicle);
+            ctx.Add(new VehicleSession(plate));
             await ctx.SaveChangesAsync();
             return Ok();
         }
 
-        if (vehicle.Sessions.Any(x => x.PaidAt == null))
+        if (sessions.Any(x => x.PaidAt == null))
         {
             return BadRequest("Saiu sem pagar");
         }
 
-        vehicle.NewSession();
+        ctx.Add(new VehicleSession(plate));
         await ctx.SaveChangesAsync();
-
         return Ok();
     }
 }

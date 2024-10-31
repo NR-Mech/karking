@@ -9,13 +9,11 @@ public class GetVehicleController(KarkingDbContext ctx) : ControllerBase
     public async Task<IActionResult> Get([FromRoute] string plate)
     {
         plate = plate.ToUpper();
-        var vehicle = await ctx.Vehicles
-            .Include(x => x.Sessions)
-            .FirstOrDefaultAsync(x => x.Plate == plate);
+        var sessions = await ctx.Sessions.Where(x => x.Plate == plate).ToListAsync();
 
-        if (vehicle == null) return BadRequest("Veículo não encontrado");
+        if (sessions.Count == 0) return BadRequest("Veículo não encontrado");
 
-        var session = vehicle.Sessions.OrderByDescending(x => x.EntryAt).First();
+        var session = sessions.OrderByDescending(x => x.EntryAt).First();
 
         if (session.PaidAt == null)
         {
@@ -24,7 +22,7 @@ public class GetVehicleController(KarkingDbContext ctx) : ControllerBase
                 session.EntryAt,
                 Status = "Pagamento Pendente",
                 Now = DateTime.Now,
-                AmountToPay = Convert.ToInt32(Math.Round((DateTime.Now - session.EntryAt).TotalMinutes)) + 1,
+                AmountToPay = Convert.ToInt32(Math.Ceiling((DateTime.Now - session.EntryAt).TotalSeconds/60.0)),
             };
             return Ok(result);
         }

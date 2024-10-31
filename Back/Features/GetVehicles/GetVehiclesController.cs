@@ -8,15 +8,8 @@ public class GetVehiclesController(KarkingDbContext ctx) : ControllerBase
     [ProducesResponseType(200)]
     public async Task<IActionResult> Get()
     {
-        var vehicles = await ctx.Vehicles
-            .Include(x => x.Sessions)
-            .OrderByDescending(x => x.CreatedAt).ToListAsync();
+        var sessions = await ctx.Sessions.OrderByDescending(x => x.EntryAt).ToListAsync();
 
-        foreach (var vehicle in vehicles)
-        {
-            vehicle.Sessions = vehicle.Sessions.OrderByDescending(x => x.EntryAt).ToList();
-        }
-
-        return Ok(vehicles);
+        return Ok(sessions);
     }
 }
