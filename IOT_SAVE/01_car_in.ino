@@ -85,6 +85,10 @@ void loop()
     WiFiClientSecure *client = new WiFiClientSecure;
     HTTPClient https;
 
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(300);
+    digitalWrite(BUZZER_PIN, LOW);
+
     client->setInsecure();
     https.begin(*client, "https://karking-api.zaqbit.com/vehicles/entry");
 

@@ -33,6 +33,7 @@ public class GetVehicleController(KarkingDbContext ctx) : ControllerBase
         {
             EntryAt = session.EntryAt.ToStr(),
             Status = "Pagamento Realizado",
+            PaidAmount = session.PaidAmount,
             PaidAt = session.PaidAt.ToStr(),
             Now = DateTime.Now.ToStr(),
             ExitLimit = session.ExitLimit.ToStr(),
