@@ -17,8 +17,8 @@ int angle = 0;
 
 // Motor COM fita -> 0 e 90
 // Motor SEM fita -> 15 e 120
-int minAngle = 0;
-int maxAngle = 100;
+int minAngle = 15;
+int maxAngle = 120;
 
 MFRC522 _mfrc522(5, 2);
 MFRC522::MIFARE_Key _key;          
@@ -31,7 +31,6 @@ byte _readBlockData[18];
 // const char* password = "Alunos@NR!2022!";
 const char* ssid = "Zaqueu";
 const char* password = "Zaqueu2023";
-const char* serverName = "https://karking-api.zaqbit.com/vehicles";
 
 void setup() 
 {
@@ -80,37 +79,19 @@ void loop()
   Serial.print(plate);
   Serial.print("\n");
 
-  digitalWrite(RED_PIN, LOW);
-  digitalWrite(GREEN_PIN, HIGH);
-  digitalWrite(BUZZER_PIN, HIGH);
-  delay(500);
-  digitalWrite(BUZZER_PIN, LOW);
 
-  for (angle = minAngle; angle <= maxAngle; angle += 2) {
-    servo.write(angle);
-    delay(15);
-  }
-
-  delay(3000);
-
-  digitalWrite(GREEN_PIN, LOW);
-  digitalWrite(RED_PIN, HIGH);
-  for (angle = maxAngle; angle >= minAngle; angle -= 2) {
-    servo.write(angle);
-    delay(15);
-  }
-
+  int httpResponseCode = 0;
   if (WiFi.status() == WL_CONNECTED) {
     WiFiClientSecure *client = new WiFiClientSecure;
     HTTPClient https;
 
     client->setInsecure();
-    https.begin(*client, serverName);
+    https.begin(*client, "https://karking-api.zaqbit.com/vehicles/entry");
 
     https.addHeader("Content-Type", "application/json");
     https.addHeader("X-API-Key", "e46b113c7c914c9b8d3da8d91ac8e6f2");
     
-    int httpResponseCode = https.POST("{\"plate\":\"" + plate + "\"}");
+    httpResponseCode = https.POST("{\"plate\":\"" + plate + "\"}");
     
     Serial.print("HTTP Response code: ");
     Serial.print(httpResponseCode);
@@ -120,6 +101,29 @@ void loop()
   }
   else {
     Serial.println("Off-line...");
+  }
+
+  if (httpResponseCode == 200)
+  {
+    digitalWrite(RED_PIN, LOW);
+    digitalWrite(GREEN_PIN, HIGH);
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(500);
+    digitalWrite(BUZZER_PIN, LOW);
+
+    for (angle = minAngle; angle <= maxAngle; angle += 2) {
+      servo.write(angle);
+      delay(15);
+    }
+
+    delay(3000);
+
+    digitalWrite(GREEN_PIN, LOW);
+    digitalWrite(RED_PIN, HIGH);
+    for (angle = maxAngle; angle >= minAngle; angle -= 2) {
+      servo.write(angle);
+      delay(15);
+    }
   }
 
   _mfrc522.PICC_HaltA();
