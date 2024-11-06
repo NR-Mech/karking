@@ -1,3 +1,5 @@
+using Karking.Back.Extensions;
+
 namespace Karking.Back.Features.GetVehicles;
 
 [ApiController]
@@ -12,12 +14,12 @@ public class GetVehiclesController(KarkingDbContext ctx) : ControllerBase
 
         return Ok(sessions.ConvertAll(x => new {
             Plate = x.Plate,
-            EntryAt = x.EntryAt.AddHours(-3),
+            EntryAt = x.EntryAt.ToStr(),
             PayToken = x.PayToken,
             PaidAmount = x.PaidAmount,
-            PaidAt = x.PaidAt != null ? x.PaidAt.Value.AddHours(-3) : x.PaidAt,
-            ExitLimit = x.ExitLimit != null ? x.ExitLimit.Value.AddHours(-3) : x.ExitLimit,
-            ExitAt = x.ExitAt != null ? x.ExitAt.Value.AddHours(-3) : x.ExitAt,
+            PaidAt = x.PaidAt.ToStr(),
+            ExitLimit = x.ExitLimit.ToStr(),
+            ExitAt = x.ExitAt.ToStr(),
         }));
     }
 }

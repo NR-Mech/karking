@@ -8,6 +8,16 @@ public static class KarkingExtensions
         return justNumbers[..4];
     }
 
+    public static string ToStr(this DateTime dateTime)
+    {
+        return dateTime.AddHours(-3).ToString("MM/dd/yyyy HH:mm:ss");
+    }
+
+    public static string? ToStr(this DateTime? dateTime)
+    {
+        return dateTime?.AddHours(-3).ToString("MM/dd/yyyy HH:mm:ss");
+    }
+
     public static string OnlyNumbers(this string text)
     {
         if (text.HasValue())
