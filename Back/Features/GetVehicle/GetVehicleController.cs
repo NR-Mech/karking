@@ -1,3 +1,5 @@
+using Karking.Back.Extensions;
+
 namespace Karking.Back.Features.GetVehicle;
 
 [ApiController]
@@ -19,9 +21,9 @@ public class GetVehicleController(KarkingDbContext ctx) : ControllerBase
         {
             var result = new
             {
-                session.EntryAt,
+                EntryAt = session.EntryAt.ToStr(),
                 Status = "Pagamento Pendente",
-                Now = DateTime.Now,
+                Now = DateTime.Now.ToStr(),
                 AmountToPay = Convert.ToInt32(Math.Ceiling((DateTime.Now - session.EntryAt).TotalSeconds/60.0)),
             };
             return Ok(result);
@@ -29,11 +31,11 @@ public class GetVehicleController(KarkingDbContext ctx) : ControllerBase
 
         var result2 = new
         {
-            session.EntryAt,
+            EntryAt = session.EntryAt.ToStr(),
             Status = "Pagamento Realizado",
-            session.PaidAt,
-            Now = DateTime.Now,
-            session.ExitLimit,
+            PaidAt = session.PaidAt.ToStr(),
+            Now = DateTime.Now.ToStr(),
+            ExitLimit = session.ExitLimit.ToStr(),
         };
         return Ok(result2);
     }

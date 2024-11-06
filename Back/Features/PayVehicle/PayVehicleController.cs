@@ -1,3 +1,5 @@
+using Karking.Back.Extensions;
+
 namespace Karking.Back.Features.GetVehicle;
 
 [ApiController]
@@ -26,10 +28,10 @@ public class PayVehicleController(KarkingDbContext ctx) : ControllerBase
 
             var result = new
             {
-                session.EntryAt,
+                EntryAt = session.EntryAt.ToStr(),
                 Status = "Pagamento Realizado",
-                Now = DateTime.Now,
-                session.ExitLimit,
+                Now = DateTime.Now.ToStr(),
+                ExitLimit = session.ExitLimit.ToStr(),
             };
 
             return Ok(result);

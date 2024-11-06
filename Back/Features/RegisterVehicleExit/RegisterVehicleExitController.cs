@@ -1,3 +1,5 @@
+using Karking.Back.Extensions;
+
 namespace Karking.Back.Features.RegisterVehicleExit;
 
 [ApiController]
@@ -32,8 +34,8 @@ public class RegisterVehicleExitController(KarkingDbContext ctx) : ControllerBas
             var result = new
             {
                 Status = "Período de carência finalizado",
-                Now = DateTime.Now,
-                session.ExitLimit,
+                Now = DateTime.Now.ToStr(),
+                ExitLimit = session.ExitLimit.ToStr(),
             };
             return BadRequest(result);
         }
