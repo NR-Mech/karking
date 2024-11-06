@@ -12,12 +12,12 @@ public class GetVehiclesController(KarkingDbContext ctx) : ControllerBase
 
         return Ok(sessions.ConvertAll(x => new {
             Plate = x.Plate,
-            EntryAt = x.EntryAt.ToLocalTime(),
+            EntryAt = x.EntryAt.AddHours(-3),
             PayToken = x.PayToken,
             PaidAmount = x.PaidAmount,
-            PaidAt = x.PaidAt != null ? x.PaidAt.Value.ToLocalTime() : x.PaidAt,
-            ExitLimit = x.ExitLimit != null ? x.ExitLimit.Value.ToLocalTime() : x.ExitLimit,
-            ExitAt = x.ExitAt != null ? x.ExitAt.Value.ToLocalTime() : x.ExitAt,
+            PaidAt = x.PaidAt != null ? x.PaidAt.Value.AddHours(-3) : x.PaidAt,
+            ExitLimit = x.ExitLimit != null ? x.ExitLimit.Value.AddHours(-3) : x.ExitLimit,
+            ExitAt = x.ExitAt != null ? x.ExitAt.Value.AddHours(-3) : x.ExitAt,
         }));
     }
 }
