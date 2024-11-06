@@ -17,7 +17,7 @@ public class PayVehicleController(KarkingDbContext ctx) : ControllerBase
 
         var session = sessions.OrderByDescending(x => x.EntryAt).First();
 
-        if (session.PayToken != data.Token.ToString()) return BadRequest("Token inválido");
+        if (session.PayToken != data.Token) return BadRequest("Token inválido");
 
         if (session.PaidAt == null)
         {
