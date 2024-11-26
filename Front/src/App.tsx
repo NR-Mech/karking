@@ -1,8 +1,22 @@
+import Button from "./components/Button"
+import Container from "./components/Container"
+import Input from "./components/Input"
+import Title from "./components/Title"
+import { useNavigate } from "react-router";
+
 function App() {
+  const navigate = useNavigate();
+
+  const consulte = () => {
+    navigate('/payment')
+  }
+
     return (
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
+      <Container>
+        <Title/>
+        <Input content="Placa"/>
+        <Button content="Consultar" onClick={consulte}/>
+      </Container>
     )
 }
 
