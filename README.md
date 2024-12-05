@@ -1,11 +1,6 @@
 # Karking
 
-
-
-
-
-
-✅ Essa semana finalizamos o projeto da disciplina de Sistema Embarcados, ministrada pelo professor Geovanne Alves, no curso de ADS da Faculdade Nova Roma.
+✅ Esse foi o projeto da disciplina de Sistema Embarcados, ministrada pelo professor Geovanne Alves, no curso de ADS da Faculdade Nova Roma.
 
 🌐 Integrantes do grupo: Gutto França, Marcondes Oliveira, Wendell Marinho e Zaqueu Cavalcante.
 
@@ -27,9 +22,3 @@
 - Alguém poderia entrar no estacionamento, pagar apenas R$ 1,00 e só sair no final do dia, burlando a política de preço.
 - Pensando nisso, após a relização do pagamento existe um tempo de carência de 1 minuto para que o veículo saia do estacionamento.
 - Caso ele demore mais que isso, uma nova contagem se inicia e ele terá que pagar novamente pelo tempo adicional para poder sair.
-
-É muito gratificante ver tudo funcionando junto no final, só tenho a agradecer ao professor e a galera do grupo!
-
-#iot #esp32 #arduino #rfid #react #dotnet #postgres
-
-
